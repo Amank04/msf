@@ -47,7 +47,7 @@ const Testimonials = () => {
   }
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-teal-600 to-blue-700 px-4 py-12 sm:py-16 lg:px-6 isolate">
+    <section className="relative overflow-hidden bg-gradient-to-r from-teal-600 to-blue-700 px-4 py-12 sm:py-8 lg:px-6 isolate">
       <div className="mx-auto max-w-2xl lg:max-w-3xl">
         <div className="text-center text-2xl font-bold leading-8 text-white sm:text-3xl sm:leading-9">
           <h5 className="text-yellow-300 uppercase font-semibold">Testimonials</h5>
@@ -62,29 +62,21 @@ const Testimonials = () => {
           <Slider>
             {reviews.map((review, index) => (
               <Slide key={review.id} index={index}>
-                <figure className="mt-8">
+                <figure className="mt-4">
                   <blockquote className="text-center text-base font-medium leading-6 text-gray-200 sm:text-lg sm:leading-7">
                     <p className='italic'>"{review.review}"</p>
                   </blockquote>
-                  <figcaption className="mt-8">
-                    <img
-                      alt={review.name}
-                      src={review.imageUrl || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
-                      className="mx-auto h-10 w-10 rounded-full"
-                    />
-                    <div className="mt-3 flex items-center justify-center space-x-2 text-sm">
-                      <div className="font-semibold text-xl text-white">{review.name}</div>
-                      <svg width={2} height={2} viewBox="0 0 2 2" aria-hidden="true" className="fill-white">
-                        <circle r={1} cx={1} cy={1} />
-                      </svg>
-                      <div className="text-gray-300">{review.designation}</div>
+                  <figcaption className="mt-4">
+                    <div className="mt-3 items-center justify-center space-x-2 text-sm ">
+                      <div className="font-semibold text-lg text-center text-white">{review.name}</div>
+                      <div className="text-gray-300 text-center">{review.designation}</div>
                     </div>
                   </figcaption>
                 </figure>
               </Slide>
             ))}
           </Slider>
-          <div className="flex items-center mt-6 justify-center">
+          <div className="flex items-center mt-4 justify-center">
             <ButtonBack className="cursor-pointer" role="button" aria-label="previous slide">
               <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/testimonal-svg2.svg" alt="previous" />
             </ButtonBack>

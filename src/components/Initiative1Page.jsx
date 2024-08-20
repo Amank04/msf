@@ -155,7 +155,7 @@ const Initiative1Page = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 py-4 bg-gradient-to-b from-sky-100 to-white">
+      <div id='aims-section' className="container mx-auto px-6 lg:px-8 py-4 bg-gradient-to-b from-sky-100 to-white">
         <h1 className="text-5xl font-extrabold text-center text-indigo-900 mb-12 tracking-wide">The Internet College</h1>
 
         {Object.keys(data).map((key, index) => (
