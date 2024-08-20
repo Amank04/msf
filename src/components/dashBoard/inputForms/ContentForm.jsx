@@ -28,17 +28,36 @@ const ContentForm = () => {
   const editType = location.state?.type;
 
   const imageFile = watch('imageFile');
-  const [imagePreview, setImagePreview] = useState();
+  const [imagePreview, setImagePreview] = useState({});
+
 
   useEffect(() => {
     if (imageFile && imageFile.length > 0) {
-      const fileReader = new FileReader();
-      fileReader.onload = (e) => setImagePreview(e.target.result);
-      fileReader.readAsDataURL(imageFile[0]);
+      const fileArray = Array.from(imageFile); // Convert FileList to an array
+      const fileReaders = [];
+  
+      fileArray.forEach((file, index) => {
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          setImagePreview((prevPreviews) => ({
+            ...prevPreviews,
+            [index]: e.target.result,
+          }));
+        };
+        fileReader.readAsDataURL(file);
+        fileReaders.push(fileReader);
+      });
+  
+      // Clean up file readers on unmount
+      return () => {
+        fileReaders.forEach((fileReader) => fileReader.abort());
+      };
     } else {
       setImagePreview(null);
     }
   }, [imageFile]);
+  
+  
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);
@@ -76,11 +95,18 @@ const ContentForm = () => {
     }));
   };
 
-  const uploadImage = async (imageFile) => {
-    const storageReference = storageRef(imgdb, `contentImages/${imageFile.name}`);
-    await uploadBytes(storageReference, imageFile);
-    return getDownloadURL(storageReference);
+  const uploadImages = async (imageFiles) => {
+    // console.log(typeof imageFiles)
+    const arrayFiles = Array.from(imageFiles);
+    const uploadPromises = arrayFiles.map((imageFile) => {
+      const storageReference = storageRef(imgdb, `contentImages/${imageFile.name}`);
+      return uploadBytes(storageReference, imageFile)
+        .then(() => getDownloadURL(storageReference));
+    });
+  
+    return Promise.all(uploadPromises);
   };
+  
 
   const validateYouTubeUrl = (url) => {
     const pattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/i;
@@ -89,6 +115,8 @@ const ContentForm = () => {
   };
 
   const onSubmit = async (data) => {
+    // event.preventDefault(); // Prevents the default form submission
+    console.log("Form data: ", data); // Log form data
     setIsSaving(true);
     try {
       if (openedSections.videoSection) {
@@ -103,29 +131,30 @@ const ContentForm = () => {
         }
         data.videoUrl = embedId;
       }
-
+  
       const uploadedData = {
         category: data.category || ''
       };
-
+  
       if (openedSections.imageSection && data.imageFile) {
-        uploadedData.imageUrl = await uploadImage(data.imageFile[0]);
+        const imageUrls = await uploadImages(data.imageFile);
+        uploadedData.imageUrls = imageUrls;
         uploadedData.imageDetails = data.imageDetails || '';
       }
-
+  
       if (openedSections.videoSection && data.videoUrl) {
         uploadedData.videoUrl = data.videoUrl;
         uploadedData.videoDetails = data.videoDetails || '';
       }
-
+  
       if (openedSections.articleSection && data.articleUrl) {
         uploadedData.articleUrl = data.articleUrl;
         uploadedData.articleHeading = data.articleHeading || '';
         if (data.articleImage.length > 0) {
-          uploadedData.articleImageUrl = await uploadImage(data.articleImage[0]);
+          uploadedData.articleImageUrl = await uploadImages(data.articleImage[0]);
         }
       }
-
+  
       if (editData) {
         const dbRef = ref(txtdb, `${editType}/${editData.id}`);
         await update(dbRef, uploadedData);
@@ -133,18 +162,18 @@ const ContentForm = () => {
         if (openedSections.imageSection && data.imageFile) {
           await push(ref(txtdb, 'imageContent'), uploadedData);
         }
-
+  
         if (openedSections.videoSection && data.videoUrl) {
           await push(ref(txtdb, 'videoContent'), uploadedData);
         }
-
+  
         if (openedSections.articleSection && data.articleUrl) {
           await push(ref(txtdb, 'articleContent'), uploadedData);
         }
       }
-
+  
       setShowSuccess(true);
-      setTimeout(() => navigate('/admin/view-content'), 2000); // Navigate back after success
+      setTimeout(() => navigate('/admin/forms/gallery'), 2000); // Navigate back after success
     } catch (error) {
       console.error('Error submitting content: ', error);
       setShowError(true);
@@ -152,6 +181,7 @@ const ContentForm = () => {
       setIsSaving(false);
     }
   };
+  
 
   if (isLoading) {
     return <Loading />;
@@ -188,9 +218,18 @@ const ContentForm = () => {
                   <label className="block text-sm font-medium text-gray-700">
                     Image File {editData ? '' : <span className="text-red-500">*</span>}
                   </label>
-                  <input type="file" {...register('imageFile', { required: !editData ? 'Image file is required' : false })} className="mt-1 block w-full pl-3 py-2 text-base text-gray-900 border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+                  <input 
+  type="file" 
+  {...register('imageFile', { required: !editData ? 'Image file is required' : false })} 
+  multiple 
+  className="mt-1 block w-full pl-3 py-2 text-base text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" 
+/>
+
+
                   {errors.imageFile && <p className="text-red-500 text-xs italic">{errors.imageFile.message}</p>}
-                  {imagePreview && <img src={imagePreview} alt="Preview" className="mt-4 h-48 w-auto border rounded-md" />}
+                  {imagePreview && Object.values(imagePreview).map((src, index) => (
+  <img key={index} src={src} alt={`Preview ${index}`} className="mt-4 h-48 w-auto border rounded-md" />
+))}
                   <label className="block text-sm font-medium text-gray-700 mt-2">Image Details</label>
                   <textarea {...register('imageDetails')} className="mt-1 block w-full pl-3 py-2 text-base text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
                 </div>
