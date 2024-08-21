@@ -3,6 +3,7 @@ import React from "react";
 const AboutSection = React.forwardRef(({ title, content, imageUrl }, ref) => {
   return (
     <section
+      id="about"
       ref={ref}
       data-animation="animate-slide-in"
       className="py-4 bg-gradient-to-r from-cyan-50 to-blue-100"

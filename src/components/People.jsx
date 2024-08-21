@@ -22,9 +22,11 @@ const People = React.memo(() => {
                 Object.keys(data).forEach(key => {
                     const member = data[key];
                     const position = member.position || 'Unknown';
+                    const designation = member.designation;
                     if (!positionGroups[position]) {
                         positionGroups[position] = {
                             title: position,
+                            designation: designation,
                             members: [],
                             key: position
                         };
@@ -73,7 +75,7 @@ const People = React.memo(() => {
                         {hoveredMember === member.name && (
                             <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-xl p-4">
                                 <div className="text-white text-sm p-3 bg-gray-900 bg-opacity-80 rounded">
-                                    <p><strong>Position:</strong> {member.position}</p>
+                                    <p><strong>Position:</strong> {member.designation}</p>
                                     <p><strong>Details:</strong> {member.details}</p>
                                 </div>
                             </div>
@@ -111,7 +113,7 @@ const People = React.memo(() => {
                         <img
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Pro._Dinesh_Singh_Photo-_High_resolution_1.jpg/1280px-Pro._Dinesh_Singh_Photo-_High_resolution_1.jpg"
                             alt="Prof. Dinesh Singh"
-                            className="md:w-1/2 w-full h-auto object-cover rounded-l-lg"
+                            className="md:w-1/2 w-full h-auto object-cover rounded-lg"
                         />
                         <div className="md:w-1/2 w-full p-8">
                             <h2 className="text-4xl font-bold">Prof. Dinesh Singh - Director</h2>

@@ -24,6 +24,10 @@ const MathematicalSciencesFoundation = () => {
       setOpenSection(prevOpenSection => (prevOpenSection === section ? null : section));
   };
 
+  const handleLearnMoreClick = () => {
+    document.getElementById('our-story').scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -53,24 +57,24 @@ const MathematicalSciencesFoundation = () => {
 
   return (
     <div className="font-lato text-gray-900 bg-gradient-to-r from-cyan-50 to-blue-100">
-      <section ref={sectionRefs.first} data-animation="animate-fly-in" className="relative w-full h-60 mt-0 bg-gradient-to-r from-teal-600 to-blue-700 h-screen">
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 ">
-          {/* <div
-            className="absolute top-0 left-0 right-0 bottom-0 bg-repeat blur-sm"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='50' height='50' patternTransform='scale(3) rotate(50)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(22, 31%, 66%, 1)'/><path d='M0 0v50h50V0zm.88.88h23.24v23.24H.87zm25 0h23.24v23.24H25.87zm-25 25h23.24v23.24H.87zm25 0h23.24v23.24H25.87z'  stroke-width='9' stroke='none' fill='hsla(7,52.6%,30.6%,1)'/><path d='M0 0v9.31A9.3 9.3 0 0 0 9.31.01V0zm40.69 0a9.3 9.3 0 0 0 9.3 9.31V0zm-15.7 13.76a11.23 11.23 0 1 0 0 22.47 11.23 11.23 0 0 0 0-22.47zM0 40.69V50h9.31A9.3 9.3 0 0 0 0 40.7zm50 0a9.3 9.3 0 0 0-9.31 9.3V50h9.3z'  stroke-width='9' stroke='none' fill='hsla(6,56.8%,49%,1)'/><path d='M18.91 0a6.1 6.1 0 0 0 12.18 0zM0 18.9v12.2a6.1 6.1 0 0 0 0-12.2zm50 0a6.1 6.1 0 1 0 0 12.2zm-25 25a6.1 6.1 0 0 0-6.1 6.1h12.2a6.1 6.1 0 0 0-6.1-6.1z'  stroke-width='9' stroke='none' fill='hsla(174,20.8%,19.8%,1)'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>")`,
-            }}
-          ></div> */}
-          <h1 className="text-blue-50 text-5xl font-bold mb-4 animate-bounce">
-            Mathematical Sciences Foundation
-          </h1>
-          <p className="text-blue-100 text-md font-bold mb-4 animate-pulse italic">
+      <section className="relative w-full bg-gradient-to-r from-teal-900 to-blue-950 h-screen">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-2">
+        <div className="text-center text-white">
+            <h1 className="text-6xl font-bold mb-4">Mathematical Sciences Foundation</h1>
+          <p className="text-blue-100 text-2xl font-bold mb-4 animate-pulse">
             A initiative by Prof. Dinesh Singh
           </p>
+          <button
+              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full"
+              onClick={handleLearnMoreClick}
+            >
+              Learn More
+            </button>
+          </div>
         </div>
       </section>
 
-      <section ref={sectionRefs.second} data-animation="animate-slide-in" className="py-4 bg-gradient-to-r from-cyan-50 to-blue-100">
+      <section id='our-story' ref={sectionRefs.second} data-animation="animate-slide-in" className="py-4 bg-gradient-to-r from-cyan-50 to-blue-100">
         <div className="container mx-auto px-8">
           <div className="flex flex-wrap">
             <div className="w-full md:w-1/2 p-4">

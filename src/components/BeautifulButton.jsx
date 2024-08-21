@@ -5,21 +5,26 @@ const BeautifulButton = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        // console.log("buttoin is pressed.")
         navigate('/about/story'); // Replace with your target path
     };
 
     return (
-        <div className='bg-gradient-to-r from-teal-600 via-blue-500 to-blue-700 py-6 w-full flex flex-col items-center justify-center'>
-            <h1 className="text-white text-3xl font-bold mb-2">
-                Discover Our Journey
-            </h1>
+        <div className='bg-gradient-to-r from-teal-600 to-blue-700 py-12 w-full flex flex-col items-center justify-center '>
+            <div className='text-center text-2xl font-bold leading-8 text-white sm:text-3xl sm:leading-9 pb-2'>
+
+            <h5 className="text-yellow-300 uppercase font-semibold">Discover our journey</h5>
+            <p>Our History</p>
+            </div>
+            <p className="text-white text-lg max-w-3xl text-center mb-4 font-serif">
+                The Mathematical Sciences Foundation (MSF) has a rich history that traces back to the consolidation of various mathematical activities into the Centre for Mathematical Sciences (CMS) at St. Stephen's College in 1998. In 2000, substantial funding from ICICI Bank transformed CMS into the ICICI Centre for Mathematical Sciences (ICMS). This center rapidly expanded, offering innovative programs that outgrew its initial capacity......
+            </p>
             <button
                 onClick={handleClick}
-                className="bg-white text-purple-600 font-bold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105"
+                className="bg-indigo-700 hover:bg-indigo-950 text-white font-bold py-2 px-4 rounded-full"
             >
-                Our History
+                Learn More
             </button>
+            
         </div>
     );
 };
